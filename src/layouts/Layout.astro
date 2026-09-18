@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<!-- La clase scroll-smooth habilita el desplazamiento suave nativo -->
+<html lang="es" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Portfolio de Martín - Backend Developer" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon2.png" />
+		<title>{title}</title>
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+	</head>
+	<body class="bg-zinc-950 text-zinc-300 font-['Inter'] antialiased selection:bg-blue-600 selection:text-white">
+		
+		<!-- NAVBAR STICKY -->
+		<nav class="sticky top-0 z-50 w-full backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800">
+			<div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-center relative">
+				
+				<!-- Links de Navegación (Desktop) -->
+				<div class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+					<a href="#sobre-mi" class="hover:text-zinc-100 transition-colors">Sobre Mí</a>
+					<a href="#stack" class="hover:text-zinc-100 transition-colors">Stack Tecnológico</a>
+					<a href="#proyectos" class="hover:text-zinc-100 transition-colors">Proyectos</a>
+					<a href="#educacion" class="hover:text-zinc-100 transition-colors">Educación</a>
+					<a href="#contacto" class="hover:text-zinc-100 transition-colors">Contacto</a>
+				</div>
+
+				<!-- Botón Contacto y Menú Hamburguesa (Mobile) -->
+				<div class="flex items-center gap-4 md:hidden absolute right-6">
+					<a href="#contacto" class="text-xs font-medium bg-blue-600/10 text-blue-400 border border-blue-500/20 px-3 py-1.5 rounded hover:bg-blue-600/20 transition-colors">
+						Contactar
+					</a>
+					<button id="mobile-menu-btn" class="text-zinc-400 hover:text-zinc-100 p-1">
+						<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<!-- Menú Desplegable (Mobile) -->
+			<div id="mobile-menu" class="hidden md:hidden bg-zinc-950 border-b border-zinc-800 px-6 py-4 absolute w-full shadow-xl">
+				<div class="flex flex-col gap-4 text-sm font-medium text-zinc-400">
+					<a href="#sobre-mi" class="hover:text-zinc-100 transition-colors mobile-link block w-full">Sobre Mí</a>
+					<a href="#stack" class="hover:text-zinc-100 transition-colors mobile-link block w-full">Stack Tecnológico</a>
+					<a href="#proyectos" class="hover:text-zinc-100 transition-colors mobile-link block w-full">Proyectos</a>
+					<a href="#educacion" class="hover:text-zinc-100 transition-colors mobile-link block w-full">Educación</a>
+					<a href="#contacto" class="hover:text-zinc-100 transition-colors mobile-link block w-full">Contacto</a>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Contenedor Principal de la Página -->
+		<main class="max-w-4xl mx-auto px-6 py-12 md:py-16">
+			<slot />
+		</main>
+
+		<!-- Script para el menú de Mobile -->
+		<script>
+			const btn = document.getElementById('mobile-menu-btn');
+			const menu = document.getElementById('mobile-menu');
+			const links = document.querySelectorAll('.mobile-link');
+
+			// Abrir/Cerrar menú al tocar la hamburguesa
+			if (btn && menu) {
+				btn.addEventListener('click', () => {
+					menu.classList.toggle('hidden');
+				});
+			}
+
+			// Cerrar el menú automáticamente al hacer click en un link
+			links.forEach(link => {
+				link.addEventListener('click', () => {
+					if (menu) {
+						menu.classList.add('hidden');
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	.font-mono {
+		font-family: 'JetBrains Mono', monospace;
+	}
+</style>
