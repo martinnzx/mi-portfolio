@@ -111,6 +111,9 @@ const { title } = Astro.props;
 			const navLinks = document.querySelectorAll('.nav-link');
 			const sections = document.querySelectorAll('section[id], footer[id]');
 
+			let isClickScrolling = false;
+			let clickTimeout;
+
 			const setActive = (currentId) => {
 				navLinks.forEach(link => {
 					const href = link.getAttribute('href');
@@ -126,22 +129,42 @@ const { title } = Astro.props;
 
 			// Intersection Observer para detectar sección visible con precisión
 			const observer = new IntersectionObserver((entries) => {
+				if (isClickScrolling) return;
+
 				entries.forEach(entry => {
 					if (entry.isIntersecting) {
 						setActive(entry.target.id);
 					}
 				});
 			}, {
-				rootMargin: '-20% 0px -60% 0px'
+				rootMargin: '-20% 0px -50% 0px'
 			});
 
 			sections.forEach(sec => observer.observe(sec));
 
-			// Al hacer click en cualquier enlace, resaltar de inmediato
+			// Al hacer scroll, si llegamos al fondo absoluto de la página, activar Contacto
+			window.addEventListener('scroll', () => {
+				if (isClickScrolling) return;
+
+				const scrollPosition = window.innerHeight + window.scrollY;
+				const threshold = document.documentElement.offsetHeight - 50;
+				if (scrollPosition >= threshold) {
+					setActive('contacto');
+				}
+			}, { passive: true });
+
+			// Al hacer click en cualquier enlace, resaltar de inmediato y pausar el observer durante el viaje
 			navLinks.forEach(link => {
 				link.addEventListener('click', () => {
 					const targetId = link.getAttribute('href')?.replace('#', '');
-					if (targetId) setActive(targetId);
+					if (targetId) {
+						setActive(targetId);
+						isClickScrolling = true;
+						clearTimeout(clickTimeout);
+						clickTimeout = setTimeout(() => {
+							isClickScrolling = false;
+						}, 800);
+					}
 				});
 			});
 		</script>
